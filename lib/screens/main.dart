@@ -15,29 +15,35 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  Provider.debugCheckInvalidValueType = null;
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Гарантирует инициализацию виджетов Flutter перед запуском Firebase
+  await Firebase.initializeApp(); // Инициализация Firebase
+
+  Provider.debugCheckInvalidValueType =
+      null; // Отключение предупреждений о типах данных для провайдеров (при необходимости)
+
   runApp(
     MultiProvider(
       providers: [
-        Provider(create: (_) => CategoryProvider()),
+        Provider(create: (_) => CategoryProvider()), // Провайдер для категорий
       ],
       child: MainApp(),
     ),
   );
 }
 
+// Основной класс приложения
 class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: false, // Убирает баннер отладки
       theme: ThemeData(
-        primaryColor: Colors.cyan.shade700,
+        primaryColor: Colors.cyan.shade700, // Устанавливает основной цвет темы
       ),
-      initialRoute: SplashScreen.id,
+      initialRoute: SplashScreen.id, // Устанавливает начальный экран
       routes: <String, WidgetBuilder>{
+        // Карта маршрутов приложения
         SplashScreen.id: (context) => SplashScreen(),
         LoginScreen.id: (context) => LoginScreen(),
         PhoneAuthScreen.id: (context) => PhoneAuthScreen(),
@@ -47,7 +53,7 @@ class MainApp extends StatelessWidget {
         HomeScreen.id: (context) => HomeScreen(),
         SellerSubcat.id: (context) => SellerSubcat(),
         SellerCategory.id: (context) => SellerCategory(),
-        SellerCarForm.id: (context) => SellerCarForm()
+        SellerCarForm.id: (context) => SellerCarForm(),
       },
     );
   }

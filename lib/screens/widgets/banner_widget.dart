@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic_plus/flutter_neumorphic.dart';
 
+// Виджет для отображения баннера с анимацией и кнопками
 class BannerWidget extends StatelessWidget {
   const BannerWidget({super.key});
 
@@ -9,27 +10,31 @@ class BannerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Neumorphic(
       child: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * .25,
-        color: Colors.cyan,
+        width: MediaQuery.of(context).size.width, // Ширина равна ширине экрана
+        height: MediaQuery.of(context).size.height *
+            .25, // Высота - 25% от высоты экрана
+        color: Colors.cyan, // Фоновый цвет контейнера
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0), // Внутренние отступы
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment
+                .spaceBetween, // Расположение дочерних виджетов с равными промежутками
             children: [
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceBetween, // Равномерное расположение элементов по горизонтали
                   children: [
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment
+                          .start, // Выравнивание по левому краю
                       children: [
                         const SizedBox(
                           height: 10,
                         ),
                         const Text(
-                          'CARS',
+                          'CARS', // Заголовок баннера
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -40,16 +45,17 @@ class BannerWidget extends StatelessWidget {
                           height: 20,
                         ),
                         SizedBox(
-                          height: 45.0,
+                          height: 45.0, // Высота для анимированного текста
                           child: DefaultTextStyle(
                             style: const TextStyle(
                               fontSize: 15.0,
                               fontWeight: FontWeight.bold,
                             ),
                             child: AnimatedTextKit(
-                              repeatForever: true,
+                              repeatForever: true, // Повторение анимации
                               isRepeatingAnimation: true,
                               animatedTexts: [
+                                // Последовательность анимаций с разными текстами
                                 FadeAnimatedText(
                                   'Search for all the things\nyou are Interested',
                                   duration: const Duration(seconds: 4),
@@ -68,6 +74,7 @@ class BannerWidget extends StatelessWidget {
                         )
                       ],
                     ),
+                    // Neumorphic контейнер с изображением
                     Neumorphic(
                       style: const NeumorphicStyle(
                           color: Colors.white, oppositeShadowLightSource: true),
@@ -81,11 +88,12 @@ class BannerWidget extends StatelessWidget {
                 ),
               ),
               Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisSize: MainAxisSize.min, // Минимальная ширина строки
                 children: [
+                  // Кнопка "Buy Car"
                   Expanded(
                     child: NeumorphicButton(
-                      onPressed: () {},
+                      onPressed: () {}, // Действие при нажатии на кнопку
                       style: const NeumorphicStyle(color: Colors.white),
                       child: const Text(
                         'Buy Car',
@@ -94,11 +102,12 @@ class BannerWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    width: 20,
+                    width: 20, // Промежуток между кнопками
                   ),
+                  // Кнопка "Sell Car"
                   Expanded(
                     child: NeumorphicButton(
-                      onPressed: () {},
+                      onPressed: () {}, // Действие при нажатии на кнопку
                       style: const NeumorphicStyle(color: Colors.white),
                       child: const Text(
                         'Sell Car',

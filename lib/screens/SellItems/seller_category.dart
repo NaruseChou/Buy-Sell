@@ -6,16 +6,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+// Экран выбора категории для продавца
 class SellerCategory extends StatelessWidget {
+  // Идентификатор экрана, используемый для навигации
   static const String id = 'Seller-category-list-screen';
 
   @override
   Widget build(BuildContext context) {
+    // Инициализация экземпляра FirebaseServices для работы с Firebase
     FirebaseServices sevice = FirebaseServices();
 
+    // Доступ к провайдеру категорий, чтобы получать и устанавливать выбранные данные
     var _catProvider = Provider.of<CategoryProvider>(context);
 
     return Scaffold(
+      // Верхняя панель приложения (AppBar) с заголовком
       appBar: AppBar(
         elevation: 0,
         shape: const Border(
@@ -29,20 +34,25 @@ class SellerCategory extends StatelessWidget {
         ),
       ),
       body: Container(
+        // FutureBuilder для получения списка категорий из Firebase Firestore
         child: FutureBuilder<QuerySnapshot>(
+          // Запрос для получения данных о категориях, отсортированных по полю `sortId`
           future: sevice.categories.orderBy('sortId', descending: false).get(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            // Обработка ошибок при получении данных
             if (snapshot.hasError) {
               return Container();
             }
 
+            // Показывает индикатор загрузки, пока данные загружаются
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
                 child: CircularProgressIndicator(),
               );
             }
 
+            // Список категорий после успешного получения данных
             return Container(
               child: ListView.builder(
                 itemCount: snapshot.data?.docs.length,
@@ -52,28 +62,35 @@ class SellerCategory extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListTile(
+                      // При нажатии на элемент списка происходит навигация
                       onTap: () {
+                        // Установка выбранной категории и документа в провайдер
                         _catProvider.getCategory(doc?['catName']);
                         _catProvider.getCatSnapshot(doc);
+
+                        // Проверка, есть ли подкатегории в категории
                         if (doc?['subCat'] == null) {
-                          // If `subCat` is null, navigate to `SellerCarForm`
+                          // Если подкатегорий нет, переходим к форме `SellerCarForm`
                           Navigator.pushNamed(context, SellerCarForm.id);
                         } else {
-                          // Otherwise, navigate to `SellerSubcat`
+                          // В противном случае переходим к экрану подкатегорий `SellerSubcat`
                           Navigator.pushNamed(context, SellerSubcat.id,
                               arguments: doc);
                         }
                       },
+                      // Изображение категории
                       leading: Image.network(
                         doc?['image'] ??
-                            '', // Add a default empty string to prevent errors
+                            '', // Если изображение отсутствует, используется пустая строка
                         width: 40,
                       ),
+                      // Название категории
                       title: Text(
                         doc?['catName'] ??
-                            '', // Add a default empty string to prevent errors
+                            '', // Если название отсутствует, используется пустая строка
                         style: const TextStyle(fontSize: 15),
                       ),
+                      // Значок стрелки, если у категории есть подкатегории
                       trailing: doc?['subCat'] == null
                           ? null
                           : Icon(

@@ -10,39 +10,43 @@ import 'widgets/category_widget.dart';
 import 'favorite_screen.dart';
 import 'account_screen.dart';
 
+// Главный экран приложения, который содержит нижнюю панель навигации и отображает содержимое на основе выбранного экрана
 class HomeScreen extends StatefulWidget {
-  User? user = FirebaseAuth.instance.currentUser;
-  static const String id = 'home-screen';
+  User? user = FirebaseAuth
+      .instance.currentUser; // Получаем текущего пользователя Firebase
+  static const String id = 'home-screen'; // Уникальный ID экрана для навигации
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int selectedPage = 0;
+  int selectedPage = 0; // Индекс выбранной страницы
   final List<Widget> _pageOptions = [
-    HomeScreenContent(),
-    FavoriteScreen(),
-    MyAddScreen(),
-    AccountScreen()
+    HomeScreenContent(), // Главная страница контента
+    FavoriteScreen(), // Экран избранного
+    MyAddScreen(), // Экран добавления объявлений
+    AccountScreen() // Экран профиля
   ];
 
-  String address = 'Russia';
+  String address = 'Russia'; // Начальное значение адреса
 
-  get googleService => null;
+  get googleService => null; // Заглушка для сервиса Google
 
+  // Метод для получения адреса по координатам
   Future<String?> getAddress() async {
-    final coordinates = new Coordinates(1.10, 45.50);
+    final coordinates = Coordinates(1.10, 45.50); // Пример координат
     var addresses =
         await googleService.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
 
     setState(() {
-      addresses = first.addressLine as List<Address>;
+      addresses = first.addressLine
+          as List<Address>; // Обновление адресов (необходимо исправить)
     });
 
     setState(() {
-      address = first.addressLine;
+      address = first.addressLine; // Установка полученного адреса
     });
 
     return first.addressLine;
@@ -51,25 +55,27 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // Нижняя панель навигации с ConvexAppBar
       bottomNavigationBar: ConvexAppBar(
         style: TabStyle.react,
         backgroundColor: Colors.cyan.shade600,
         items: [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.favorite, title: 'favorite'),
-          TabItem(icon: Icons.add, title: 'Add'),
-          TabItem(icon: Icons.people, title: 'Profile'),
+          TabItem(icon: Icons.home, title: 'Home'), // Вкладка Главная
+          TabItem(icon: Icons.favorite, title: 'Favorite'), // Вкладка Избранное
+          TabItem(icon: Icons.add, title: 'Add'), // Вкладка Добавить
+          TabItem(icon: Icons.people, title: 'Profile'), // Вкладка Профиль
         ],
-        initialActiveIndex: selectedPage,
+        initialActiveIndex: selectedPage, // Начальная активная вкладка
         onTap: (int index) {
           setState(() {
-            selectedPage = index;
+            selectedPage = index; // Обновление активной вкладки
           });
         },
       ),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0.0,
+        // Кнопка выбора местоположения с переходом на экран LocationScreen
         title: InkWell(
           onTap: () {
             Navigator.pushNamed(context, LocationScreen.id);
@@ -105,17 +111,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      body: _pageOptions[selectedPage],
+      body: _pageOptions[selectedPage], // Отображение текущей активной страницы
     );
   }
 }
 
-// Создаем отдельный виджет для содержимого начального экрана
+// Виджет с основным содержимым начального экрана
 class HomeScreenContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
+        // Панель поиска с иконкой уведомлений
         Container(
           color: Colors.white,
           child: Padding(
@@ -140,7 +147,7 @@ class HomeScreenContent extends StatelessWidget {
                   ),
                 ),
                 SizedBox(width: 10),
-                Icon(Icons.notifications_none),
+                Icon(Icons.notifications_none), // Иконка уведомлений
                 SizedBox(width: 10),
               ],
             ),
@@ -150,8 +157,8 @@ class HomeScreenContent extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
           child: Column(
             children: [
-              BannerWidget(),
-              CategoryWidget(),
+              BannerWidget(), // Баннер виджет
+              CategoryWidget(), // Виджет категорий
             ],
           ),
         ),
